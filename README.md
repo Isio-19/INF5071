@@ -9,10 +9,10 @@ To launch the various 3D related projects, please use a server or the Live Serve
 ### Exercice 2
 
 To move the ship, use:
-- W, to move up;
-- A, to move left;
-- S, to move down;
-- D, to move right;
+- `W` or `the up arrow`, to move up;
+- `A` or `the left arrow`, to move left;
+- `S` or `the down arrow`, to move down;
+- `D` or `the right arrow`, to move right;
 - SpaceBar, to speed up the ship.
 
 ## 3D Animations
@@ -26,9 +26,9 @@ To move the scene, use either, the left, middle or right mouse buttons.
 Visualisation of the connections between neurons from a certain point, in a mouse's brain.
 
 Use the:
-- Left mouse button, torotate around the brain;
-- Middle mouse button, to zoom in or out;
-- Right mouse button, to pan the camera.
+- `Left mouse button`, torotate around the brain;
+- `Middle mouse button`, to zoom in or out;
+- `Right mouse button`, to pan the camera.
 
 ## Canva Drawing
 
