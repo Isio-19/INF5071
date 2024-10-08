@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+    <html>
+
+        <!-- Utilisez OpenGL pour dessiner deux cubes, l'un utilisant 
+            glDrawArrays et l'autre utilisant glDrawElements. Les touches
+            fléchées peuvent être utilisées pour faire pivoter les deux cubes.
+
+            Notez que ce programme n'utilise pas d'éclairage.-->
+        <head>
+            <meta charset="UTF-8">
+            <title>Unlit Cube Example</title>
+
+            <script src="https://math.hws.edu/graphicsbook/source/glsim/glsim.js"></script>  <!-- load the OpenGL 1.1 simulation code -->
+
+            <script>
+
+                var rotateX = 15;   // rotations du cube autour des axes.
+                var rotateY = -15;
+                var rotateZ = 0;
+                
+                /* Tableaux à utiliser avec glDrawElements. Ce sont les données 
+                pour un cube avec 6 couleurs différentes aux six Vertex (sans éclairage).
+                */
+                
+                var vertexCoords = [  // Coordonnées des Vertex d'un cube.
+                        1,1,1,   1,1,-1,   1,-1,-1,   1,-1,1,
+                        -1,1,1,  -1,1,-1,  -1,-1,-1,  -1,-1,1  ];
+                        
+                var vertexColors = [  // Une valeur de couleur RVB pour chaque Vertex
+                        1,1,1,   1,0,0,   1,1,0,   0,1,0,
+                        0,0,1,   1,0,1,   0,0,0,   0,1,1  ];
+                        
+                var elementArray = [  // Numéro des Vertex pour les six faces.
+                        0,1,2,3, 0,3,7,4, 0,4,5,1,
+                        6,2,1,5, 6,5,4,7, 6,7,3,2  ];
+
+                /* Nous allons dessiner les arêtes du premier cube en 
+                utilisant ce tableau avec glDrawElements (cela semble 
+                assez mauvais sans éclairage si les bords ne sont pas dessinés.
+                */
+                
+                var edgeElementArray = [
+                        0,1,  1,5,  5,4,  4,0,    // arêtes de la face supérieure
+                        7,3,  3,2,  2,6,  6,7,    // arêtes de la face inférieure
+                        1,2,  0,3,  4,7,  5,6  ]; // arêtes reliant la face supérieure à la face inférieure
+                
+                /* Tableaux à utiliser avec glDrawArrays. Le tableau de coordonnées 
+                contient quatre ensembles de coordonnées de sommet pour chaque face. 
+                Le tableau de couleurs doit avoir une couleur pour chaque sommet. 
+                Étant donné que la couleur de chaque face est unie, il y a beaucoup 
+                de redondance dans la gamme de couleurs. Il existe également une 
+                redondance dans le tableau de coordonnées, par rapport à l'utilisation 
+                de glDrawElements. Mais notez qu'il est impossible d'utiliser un seul 
+                appel à glDrawElements pour dessiner un cube à six faces où chaque face 
+                a une couleur unie différente, car avec glDrawElements, 
+                les couleurs sont associées aux sommets, pas aux faces.
+                */
+                
+                var cubeCoords = [
+                    1,1,1,    -1,1,1,   -1,-1,1,   1,-1,1,      // face #1
+                    1,1,1,     1,-1,1,   1,-1,-1,  1,1,-1,      // face #2
+                    1,1,1,     1,1,-1,  -1,1,-1,  -1,1,1,       // face #3
+                    -1,-1,-1, -1,1,-1,   1,1,-1,   1,-1,-1,     // face #4
+                    -1,-1,-1, -1,-1,1,  -1,1,1,   -1,1,-1,      // face #5
+                    -1,-1,-1,  1,-1,-1,  1,-1,1,   -1,-1,1  ];  // face #6
+                
+                var cubeFaceColors = [
+                        1,0,0,  1,0,0,  1,0,0,  1,0,0,      // face #1 is red
+                        0,1,0,  0,1,0,  0,1,0,  0,1,0,      // face #2 is green
+                        0,0,1,  0,0,1,  0,0,1,  0,0,1,      // face #3 is blue
+                        1,1,0,  1,1,0,  1,1,0,  1,1,0,      // face #4 is yellow
+                        0,1,1,  0,1,1,  0,1,1,  0,1,1,      // face #5 is cyan
+                        1,0,1,  1,0,1,  1,0,1,  1,0,1,   ]; // face #6 is pink
+                        
+            
+                // ----------------------------------------------------------------------
+
+                function display() {  // Dessine l'image.
+
+                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                
+                    glLoadIdentity();             // Configurez la transformation de la vue du modèle, premier cube.
+                    glTranslatef(-2, 0, 0);     // Déplacez le cube vers la moitié gauche de la fenêtre.
+                    
+                    glRotatef(rotateZ,0,0,1);     // Appliquez des rotations.
+                    glRotatef(rotateY,0,1,0);
+                    glRotatef(rotateX,1,0,0);
+                    
+                    glVertexPointer( 3, GL_FLOAT, 0, cubeCoords );  // Définissez le type de données et l'emplacement, premier cube.
+                    glColorPointer( 3, GL_FLOAT, 0, cubeFaceColors );
+                
+                    glEnableClientState( GL_VERTEX_ARRAY );
+                    glEnableClientState( GL_COLOR_ARRAY );
+                
+                    glDrawArrays( GL_QUADS, 0, 24 ); // Dessinez le premier cube!
+                    
+                
+                    // Deuxième cube, utilisant glDrawElements. 
+                    // Dessinez également les arêtes du cube et activez 
+                    // le décalage du polygone pendant le dessin des faces du cube.
+                    
+                    glLoadIdentity();             // Configurez la transformation de la vue du modèle, premier cube.
+                
+                    glTranslatef(2, 0, 0);      // Déplacez le cube vers la moitié droite de la fenêtre.
+                
+                    glRotatef(rotateZ,0,0,1);     // Appliquez des rotations.
+                    glRotatef(rotateY,0,1,0);
+                    glRotatef(rotateX,1,0,0);
+                    
+                    glVertexPointer( 3, GL_FLOAT, 0, vertexCoords );  // Définissez le type de données et l'emplacement, deuxième cube.
+                    glColorPointer( 3, GL_FLOAT, 0, vertexColors );
+                    
+                
+                    glEnable(GL_POLYGON_OFFSET_FILL);
+                    glPolygonOffset(1,1);
+                    glDrawElements( GL_QUADS, 24, GL_UNSIGNED_INT, elementArray ); // Dessinez le deuxième cube!
+                    glDisable(GL_POLYGON_OFFSET_FILL);
+                    
+                    glDisableClientState( GL_COLOR_ARRAY );  // N'utilisez pas de tableau de couleurs pour les bords.
+                    glColor3f(0,0,0);  // Les bords seront noirs.
+                    glLineWidth(2);
+                    
+                    glDrawElements( GL_LINES, 24, GL_UNSIGNED_INT, edgeElementArray );  // Dessinez les bords!
+                    
+                }
+                
+                function initGL() {
+                    glMatrixMode(GL_PROJECTION);
+                    glOrtho(-4, 4, -2, 2, -2, 2);  // projection orthographique simple
+                    glMatrixMode(GL_MODELVIEW);
+                    glEnable(GL_DEPTH_TEST);
+                    glClearColor(0.5, 0.5, 0.5, 1);    
+                }
+                
+                function doKeyDown(evt) {
+                    var key = evt.keyCode;
+                    if ( key == 37 ) // left
+                    rotateY -= 15;
+                    else if ( key == 39 ) // right
+                    rotateY += 15;
+                    else if ( key == 40) // down
+                    rotateX += 15;
+                    else if ( key == 38 ) // up
+                    rotateX -= 15;
+                    else if ( key == 33 ) // page up
+                    rotateZ += 15;
+                    else if ( key == 34 ) // page down
+                    rotateZ -= 15;
+                    else if ( key == 36 )  // home
+                    rotateX = rotateY = rotateZ = 0;
+                    if (key >=34 && key <= 40) {
+                        evt.preventDefault();
+                    }
+                    display();
+                }
+                
+                function init() {  // Appelé par <body onload = "init ()">, lorsque la page est chargée.
+                    try {
+                        glsimUse("glcanvas"); // OpenGL dessinera sur le canevas avec id = "glcanvas".
+                    }
+                    catch (e) {
+                        document.getElementById("canvas-holder").innerHTML =
+                            "Désolé, une erreur s'est produite:<br>" + e;
+                        return;
+                    }
+                    document.onkeydown = doKeyDown;
+                    initGL();
+                    display();
+                }
+            </script>
+        </head>
+
+        <body onload="init()" data-new-gr-c-s-loaded="true">
+
+            <h3>Cubes dessinés avec glDrawArrays et glDrawElements</h3>
+
+            <p>(Faites pivoter à l'aide des touches fléchées.)</p>
+
+            <noscript>
+            &lt;p&gt;&lt;b&gt;Sorry, this page requires JavaScript!&lt;/b&gt;&lt;/p&gt;
+            </noscript>
+
+            <div id="canvas-holder">
+            <canvas id="glcanvas" width="800" height="400"></canvas>
+            </div>
+        </body>
+
+    </html>

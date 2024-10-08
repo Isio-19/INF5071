@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!-- Fureteur utilisés: Partie 1: Microsoft Edge
+                        Partie 2: Mozilla Firefox
+ -->
+<head>
+    <meta charset="UTF-8">
+    <title>INF5071 - TP3 - Ex2</title>
+    <style>
+        body{
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+        #webglcanvas {
+            position:fixed;
+            top:0;
+            left:0;
+            z-index: -1;
+        }
+        
+    </style>
+    <script src="tp3_ex2.js"></script>
+</head>
+<body onload="init()">
+<center>
+    <label for="brushSize">Taille</label>
+    <input type="range" min="1" max="64" value="8" class="slider" id="brushSize">
+    <label for="brushSize">Opacité </label>
+    <input type="range" min="0" max="1" value="0.1" step="0.01" class="slider" id="brushAlpha">
+    <input type="button" value="Effacer" id="eraseCanvas">
+    <div id="canvas-holder"><canvas id="webglcanvas" width="500" height="500"></canvas></div>
+</center>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512">
+  <!--  viewBox="0 0 1 1"-->
+  <!-- Éléments réutilisables -->
+  <style>
+    .text {
+      font : bold 40px consolas;
+      fill : white;
+      stroke-width : 1.5px;
+      stroke : black;
+    }
+  </style>
+  <!-- Arrière-plan sous forme d'image -->
+  <image href="tp1_ex1_ciel.png" width="512" height="512"/>
+
+  <!-- Corps -->
+  <ellipse
+    style="fill:#563994;fill-opacity:1;stroke:#ffffff;stroke-width:1.19509;stroke-opacity:0;opacity:0.85"
+    id="path231"
+    ry="250"
+    rx="300"
+    cy="450"
+    cx="256">
+    
+    <!--Déplacement vertical du corps-->
+    <animate attributeName="cy" keyTimes="0; 0.25; 0.5; 0.75; 1" values="450; 390; 390; 450; 450" dur="20s" repeatCount="indefinite"> </animate>
+  </ellipse>
+
+  <!-- Visage (Yeux et Sourire) -->
+
+  <!--Transformation pour centrer les yeux et la bouche-->
+  <svg width="225" height="249" x="120" y="150" >
+    <g transform="scale(2 , 2)">
+      <path
+        style="fill:#ffffff; fill-opacity:0; stroke:#ffffff; stroke-width:1.67313; stroke-dasharray:none; stroke-opacity:1"
+        id="path3846"
+        d="M 90.550598,108.57756 
+            A 24.053391,21.243029 0 0 1 67.866808,123.27071 24.053391,21.243029 0 0 1 44.912252,108.9093" />
+      <path
+        style="fill:#ffffff; fill-opacity:0; stroke:#ffffff; stroke-width:1.67313; stroke-dasharray:none; stroke-opacity:1"
+        id="path3848-8"
+        d="M 50.612483,83.723618 
+            A 14.05764,19.53051 0 0 1 37.355285,97.232264 14.05764,19.53051 0 0 1 23.939843,84.028609" />
+      <path
+        style="fill:#ffffff; fill-opacity:0; stroke:#ffffff; stroke-width:1.67313; stroke-dasharray:none; stroke-opacity:1"
+        id="path3848-8-8"
+        d="M 111.5232,83.723618 
+            A 14.05764,19.53051 0 0 1 98.266002,97.232264 14.05764,19.53051 0 0 1 84.85056,84.028609" />
+    </g> 
+
+    <!--Déplacement vertical des yeux et de la bouche-->
+    <animate attributeName="y" keyTimes="0;0.25;0.5;0.75;1" values="120;50;50;120;120" dur="20s" repeatCount="indefinite"> </animate>
+    <animateTransform attributeName="transform" type="scale" keyTimes="0; 0.25; 0.5; 0.75; 1" 
+      values="1 1; 1 0.8; 1 0.8; 1 1; 1 1" dur="20s" repeatCount="indefinite"> </animateTransform>
+  </svg>
+
+  <!-- Texte 1 : Inspirez -->
+  <text x="160" y="100" class="text" fill-opacity="0" stroke-opacity="0">
+    Inspirez...
+
+    <!--Animation du texte blanc-->
+    <animate id="rise" attributeName="y" keyTimes="0;1" values="100; 80" 
+    begin="0s; lowerHold.end" dur="5s" repeatCount="1"></animate>
+
+    <animate id="rise" attributeName="fill-opacity" keyTimes="0; 0.5; 1" values="0; 1; 0" 
+    begin="0s; lowerHold.end" dur="5s" repeatCount="1"></animate>
+
+      <!--Animation du contour noir-->
+    <animate attributeName="stroke-opacity" keyTimes="0; 0.5; 1" values="0; 1; 0" 
+    begin="0s; lowerHold.end" dur="5s" repeatCount="1"></animate>
+  </text>
+  
+  <!--Animation des points pour montrer le maintient de la respiration-->
+  <g>
+    <text x="200" y="80" class="text" fill-opacity="0" stroke-opacity="0">
+      .
+      <animate id="riseHold" attributeName="fill-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 1; 1; 1; 1; 1; 0" begin="rise.end" dur="5s" repeatCount="1"></animate>
+
+      <animate id="riseHold" attributeName="stroke-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 1; 1; 1; 1; 1; 0" begin="rise.end" dur="5s" repeatCount="1"></animate>
+    </text>
+
+    <text x="200" y="80" class="text" fill-opacity="0" stroke-opacity="0">
+      ..
+      <animate id="riseHold" attributeName="fill-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 1; 1; 1; 1; 0" begin="rise.end" dur="5s" repeatCount="1"></animate>
+
+      <animate id="riseHold" attributeName="stroke-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 1; 1; 1; 1; 0" begin="rise.end" dur="5s" repeatCount="1"></animate>
+    </text>  
+
+    <text x="200" y="80" class="text" fill-opacity="0" stroke-opacity="0">
+      ...
+      <animate id="riseHold" attributeName="fill-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 1; 1; 1; 0" begin="rise.end" dur="5s" repeatCount="1"></animate>
+      <animate id="riseHold" attributeName="stroke-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1"
+        values="0; 0; 0; 1; 1; 1; 0" begin="rise.end" dur="5s" repeatCount="1"></animate>
+    </text>  
+
+    <text x="200" y="80" class="text" fill-opacity="0" stroke-opacity="0">
+      ....
+      <animate id="riseHold" attributeName="fill-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 0; 1; 1; 0" begin="rise.end" dur="5s" repeatCount="1"></animate>
+      <animate id="riseHold" attributeName="stroke-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 0; 1; 1; 0" begin="rise.end" dur="5s" repeatCount="1"></animate>
+    </text>  
+
+    <text x="200" y="80" class="text" fill-opacity="0" stroke-opacity="0">
+      .....
+      <animate id="riseHold" attributeName="fill-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 0; 0; 1; 0" begin="rise.end" dur="5s" repeatCount="1"></animate>
+      <animate id="riseHold" attributeName="stroke-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 0; 0; 1; 0" begin="rise.end" dur="5s" repeatCount="1"></animate>
+    </text>
+  </g>
+
+  <!-- Texte 2 : Expirez -->
+  <!--Animation du texte pour l'expiration-->
+  <text x="160" y="80" class="text" fill-opacity="0" stroke-opacity="0">
+    Expirez...
+    <animate id="lower" attributeName="y" keyTimes="0;1" values="80; 100" 
+      begin="riseHold.end" dur="5s" repeatCount="1"></animate>
+
+    <animate id="lower" attributeName="fill-opacity" keyTimes="0; 0.5; 1" values="0; 1; 0" 
+      begin="riseHold.end" dur="5s" repeatCount="1"></animate>
+
+      <!--Animation du conteur-->
+    <animate id="lower" attributeName="stroke-opacity" keyTimes="0; 0.5; 1" values="0; 1; 0" 
+      begin="riseHold.end" dur="5s" repeatCount="1"></animate>
+  </text>
+  
+  <!--Animation du texte pour le maintient de la respiration-->
+  <g>
+    <text x="200" y="100" class="text" fill-opacity="0" stroke-opacity="0">
+      .
+      <animate id="lowerHold" attributeName="fill-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 1; 1; 1; 1; 1; 0" begin="lower.end" dur="5s" repeatCount="1"></animate>
+
+      <animate id="lowerHold" attributeName="stroke-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 1; 1; 1; 1; 1; 0" begin="lower.end" dur="5s" repeatCount="1"></animate>
+    </text>  
+
+    <text x="200" y="100" class="text" fill-opacity="0" stroke-opacity="0">
+      ..
+      <animate id="lowerHold" attributeName="fill-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 1; 1; 1; 1; 0" begin="lower.end" dur="5s" repeatCount="1"></animate>
+
+      <animate id="lowerHold" attributeName="stroke-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1"
+        values="0; 0; 1; 1; 1; 1; 0" begin="lower.end" dur="5s" repeatCount="1"></animate>
+    </text> 
+
+    <text x="200" y="100" class="text" fill-opacity="0" stroke-opacity="0">
+      ...
+      <animate id="lowerHold" attributeName="fill-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 1; 1; 1; 0" begin="lower.end" dur="5s" repeatCount="1"></animate>
+
+      <animate id="lowerHold" attributeName="stroke-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 1; 1; 1; 0" begin="lower.end" dur="5s" repeatCount="1"></animate>
+    </text>  
+
+    <text x="200" y="100" class="text" fill-opacity="0" stroke-opacity="0">
+      ....
+      <animate id="lowerHold" attributeName="fill-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 0; 1; 1; 0" begin="lower.end" dur="5s" repeatCount="1"></animate>
+
+      <animate id="lowerHold" attributeName="stroke-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 0; 1; 1; 0" begin="lower.end" dur="5s" repeatCount="1"></animate>
+    </text>  
+
+    <text x="200" y="100" class="text" fill-opacity="0" stroke-opacity="0">
+      .....
+      <animate id="lowerHold" attributeName="fill-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 0; 0; 1; 0" begin="lower.end" dur="5s" repeatCount="1"></animate>
+
+      <animate id="lowerHold" attributeName="stroke-opacity" keyTimes="0; 0.17; 0.33; 0.5; 0.67; 0.83; 1" 
+        values="0; 0; 0; 0; 0; 1; 0" begin="lower.end" dur="5s" repeatCount="1"></animate>
+    </text>
+  </g>
+</svg>
+
+<!-- Note : inspiration: 5s, pause: 5s, expiration: 5s, pause: 5s-->

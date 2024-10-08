@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TP1 - Ex2 - Solution</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+    </style>
+    <script>
+        let canvas;    // Objet DOM correspondant au canvas
+        let graphics;  // Contexte de graphique 2d pour dessiner sur la canvas
+
+        // Variable pour la position des étoiles
+        let constellations = [];
+
+        // Propriétés de la ville
+        const cityLength = 64;
+        const buildingWidth = 0.1;
+        let farBuildingsHeights = [];
+        let middleBuildingsHeights = [];
+        let closeBuildingsHeights = [];
+        let farBuildingsPos = [];
+        let middleBuildingsPos = [];
+        let closeBuildingsPos = [];
+        const close_building_color = "rgb(150, 150, 150)";
+        const middle_building_color = "rgb(100, 100, 100)";
+        const far_building_color = "rgb(75, 75, 75)";
+
+        // Propriétés du vaisseau
+        let vesselPos = {x:0, y:0}
+        let speed = -10; // pixels per millisecond
+        const maxSpeed = -25;
+        const minSpeed = -10;
+        const coeffVessel = 0.5;
+
+        function generate_constellations() {
+            // Génération des constellations
+            let dispersion = 0.1;
+            for (let i=0; i < 1/dispersion; i++) {
+                for (let j=0; j < 1/dispersion; j++) {
+                    let n_stars = Math.floor(1 + Math.random() * 7);
+                    let cx = (i + 0.5) * dispersion + (Math.random()-0.5) * dispersion / 2
+                    let cy = (j + 0.5) * dispersion + (Math.random()-0.5) * dispersion / 2
+
+                    let stars = [];
+                    for (let k=0; k < n_stars; k++) {
+                        let pos = {x: cx + dispersion * (Math.random() - 0.5), y: cy + dispersion * (Math.random() - 0.5)}
+                        stars.push(pos)
+                    }
+                    constellations.push(stars)
+                }
+            }
+        }
+
+        function generate_city() {
+            //fill the buildings height arrays
+            for (let i = 0; i < 63; i++) {
+                farBuildingsHeights.push(Math.random() * canvas.height);
+                middleBuildingsHeights.push(Math.random() * canvas.height * 0.70);
+                closeBuildingsHeights.push(Math.random() * canvas.height * 0.40);
+            }
+            //fill the buildingsPos arrays
+            for (let i = 0; i < farBuildingsHeights.length; i++) {
+                farBuildingsPos.push(canvas.width * i * buildingWidth);
+                middleBuildingsPos.push(canvas.width * i * buildingWidth);
+                closeBuildingsPos.push(canvas.width * i * buildingWidth);
+            }
+        }
+
+        function draw_smog() {
+            graphics.save();
+
+            //we fill the sky with a dark colored gradient
+            var gradient = graphics.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0.1 , "#770084aa");
+            gradient.addColorStop(1, "#00000000");
+            graphics.fillStyle = gradient;
+            graphics.fillRect(0, 0, canvas.width, canvas.height);
+
+            graphics.restore();
+        }
+
+        function draw() {
+            // On nettoie le canvas avant de redessiner
+            graphics.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Dessine le background
+            draw_background();
+
+            // On dessine la ville
+            draw_city();
+
+            // On dessine le vaisseau
+            draw_vessel();
+
+            // Draw smog
+            draw_smog();
+        }
+
+        function draw_vessel() {
+            graphics.save();
+            graphics.scale(0.5, 0.5);
+            var posX = vesselPos.x;
+            var posY = vesselPos.y; 
+
+            graphics.translate(canvas.width/2 , canvas.height/2);
+
+            //plasma trail
+            graphics.save();
+            graphics.lineWidth = "2";
+            graphics.fillStyle = "cyan";
+            graphics.shadowColor = "red";
+            graphics.shadowBlur = 15;
+            graphics.beginPath();
+            posXPlasma = (speed == -10) ? 40 : 0;
+            graphics.moveTo((posX + 100) , (posY + 55) );
+            graphics.lineTo((posX + 100 ) , (posY + 75) );
+            graphics.lineTo((posX + posXPlasma) , (posY + 65) );
+            graphics.closePath();
+            graphics.fill();
+            graphics.restore();
+
+            //first white wing
+            graphics.fillStyle = "white";
+            graphics.beginPath();
+            graphics.moveTo((posX + 140) , (posY + 25) );
+            graphics.lineTo((posX + 140 ), (posY + 70) );
+            graphics.lineTo((posX + 180) , (posY + 70) );
+            graphics.lineTo((posX + 95) , (posY + 65) );
+            graphics.lineTo((posX + 50) , (posY + 50) );
+            graphics.lineTo((posX + 120) , (posY + 25) );
+            graphics.lineTo((posX + 140), (posY + 25) );
+            graphics.closePath();
+            graphics.fill();
+
+            //second blue wing
+            graphics.fillStyle = "blue";
+            graphics.beginPath();
+            graphics.moveTo((posX + 65) , posY );
+            graphics.lineTo((posX + 105) , (posY + 15) );
+            graphics.lineTo((posX + 180) , (posY + 70) );
+            graphics.lineTo((posX + 145) , (posY + 100) );
+            graphics.lineTo((posX + 105) , (posY + 100) );
+            graphics.closePath();
+            graphics.fill();
+
+            //third white wing
+            graphics.fillStyle = "white";
+            graphics.beginPath();
+            graphics.moveTo((posX + 145) , (posY + 25) );
+            graphics.lineTo((posX + 185) , (posY + 45) );
+            graphics.lineTo((posX + 300) , (posY + 63) );
+            graphics.lineTo((posX + 215) , (posY + 80) );
+            graphics.lineTo((posX + 130) , (posY + 80) );
+            graphics.lineTo(posX , (posY + 115) );
+            graphics.lineTo((posX + 95) , (posY + 65) );
+            graphics.lineTo((posX + 180) , (posY + 70) );
+            graphics.lineTo((posX + 145) , (posY + 45) );
+            graphics.lineTo((posX + 180) , (posY + 45) );
+            graphics.lineTo((posX + 140) , (posY + 25) );
+            graphics.closePath();
+            graphics.fill();
+
+            //window joint
+            graphics.beginPath();
+            graphics.moveTo((posX + 145) , (posY + 25) );
+            graphics.lineTo((posX + 140) , (posY + 25) );
+            graphics.lineTo((posX + 140) , (posY + 27) );
+            graphics.lineTo((posX + 145) , (posY + 27) );
+            graphics.closePath();
+            graphics.fill();
+
+            graphics.restore();
+        }
+
+        function draw_background() {
+            graphics.save();
+
+            //fill the sky with a dark blue color
+            graphics.fillStyle = "#1b1296";
+            graphics.fillRect(0, 0, canvas.width, canvas.height);
+
+            //dashed lines
+            graphics.strokeStyle = "#c39c9c";
+            graphics.lineWidth = "2";
+            graphics.setLineDash([5,5]);    
+
+            for (let i = 0; i < constellations.length; i++) {
+                const starSet = constellations[i];
+                const firstStar = starSet[0];
+                graphics.beginPath();
+                graphics.moveTo(firstStar[0] * canvas.width, firstStar[1] * canvas.height);
+                for (let j = 1; j < starSet.length; j++) {
+                    const star = starSet[j];
+                    const posX = star.x * canvas.width;
+                    const posY = star.y * canvas.height;
+                    
+                    graphics.lineTo(posX, posY);
+                }
+                graphics.stroke();
+            }
+            
+            //circles for stars
+            graphics.setLineDash([]);
+
+            for (let i = 0; i < constellations.length; i++) {
+                const starSet = constellations[i];
+                graphics.beginPath();
+                for (let j = 1; j < starSet.length; j++) {
+                    const star = starSet[j];
+                    const posX = star.x * canvas.width;
+                    const posY = star.y * canvas.height;
+                    
+                    graphics.moveTo(posX, posY);
+                    graphics.arc(posX, posY, 3, 0, 2 * Math.PI);
+                }
+                graphics.fill();
+            }
+            graphics.restore();
+        }
+
+        function draw_city() {
+            graphics.save();
+            
+            //for all 3 layers, draw all the buildings from farthest to closest
+            graphics.fillStyle = far_building_color;
+            for (let i = 0; i < cityLength; i++) {
+                var originBuildingX = farBuildingsPos[i];
+                var originBuildingY = canvas.height - farBuildingsHeights[i]; 
+                graphics.fillRect(originBuildingX, originBuildingY, buildingWidth * canvas.width, farBuildingsHeights[i]);
+            }
+            graphics.fillStyle = middle_building_color;
+            for (let i = 0; i < cityLength; i++) {
+                var originBuildingX = middleBuildingsPos[i];
+                var originBuildingY = canvas.height - middleBuildingsHeights[i]; 
+                graphics.fillRect(originBuildingX, originBuildingY, buildingWidth * canvas.width, middleBuildingsHeights[i]);
+            }
+            graphics.fillStyle = close_building_color;
+            for (let i = 0; i < cityLength; i++) {
+                var originBuildingX = closeBuildingsPos[i];
+                var originBuildingY = canvas.height - closeBuildingsHeights[i]; 
+                graphics.fillRect(originBuildingX, originBuildingY, buildingWidth * canvas.width, closeBuildingsHeights[i]);
+            }
+
+            graphics.restore();
+        }
+
+        function updateVesselPosition(e) {
+            // if wasd of the arrows are typed, move up, down, left or right respectivelly
+            // press space to move faster (background and spaceship)
+            if ((e.keyCode == 87 || e.keyCode == 38) && (vesselPos.y > -canvas.height/2)) { // W
+                if (vesselPos.y + speed < -canvas.height/2)
+                    vasselPos.y = -canvas.height/2;
+                else    
+                    vesselPos.y += speed;
+            }
+
+            if ((e.keyCode == 83 || e.keyCode == 40) && (vesselPos.y < canvas.height * 3/2 - 115)) { // S
+                if (vesselPos.y - speed > canvas.height * 3/2 - 115)
+                    vesselPos.y = canvas.height * 3/2 - 115;
+                else
+                    vesselPos.y -= speed;
+            }
+
+            if ((e.keyCode == 65 || e.keyCode == 37) && (vesselPos.x > -canvas.width/2)) { // A
+                if (vesselPos.x + speed < -canvas.width/2)
+                    vesselPos.x = -canvas.width/2;
+                else
+                    vesselPos.x += speed;
+            }
+
+            if ((e.keyCode == 68 || e.keyCode == 39) && (vesselPos.x < canvas.width * 3/2 - 300)) { // D
+                if (vesselPos.x - speed > canvas.width * 3/2 - 300)
+                    vesselPos.x = canvas.width * 3/2 - 300;
+                else
+                    vesselPos.x  -= speed;
+            }
+
+            if ( e.keyCode == 32 )  // Space
+                for (let i = 0; i < cityLength; i++) 
+                    speed = maxSpeed;
+        }
+
+        function releaseSpace(e) {
+            if (e.keyCode == 32)
+                speed = minSpeed;
+        }
+
+        function init() {
+            // Initialisation du dessin. Il s'affiche sur toute la fenêtre
+            canvas = document.getElementById("theCanvas");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            window.addEventListener("keydown", updateVesselPosition, true);
+            window.addEventListener("keyup", releaseSpace, true);
+            graphics = canvas.getContext("2d");
+
+            // Initialisation
+            generate_constellations();
+            generate_city();
+            requestAnimationFrame(update);
+        }
+
+        function update() {
+            // Mise à jour de la position des édifices
+
+            //if a building on the far layer is outside of the canvas, send it back 
+            if (farBuildingsPos[0] < -buildingWidth * canvas.width) {
+                var temp = farBuildingsHeights[0];
+                farBuildingsHeights.shift();
+                farBuildingsHeights.push(temp);
+                for (let i = 0; i < cityLength; i++)    
+                    farBuildingsPos[i] += buildingWidth * canvas.width;
+            }
+
+            // if a building on the middle layer is outside of the canvas, send it back 
+            if (middleBuildingsPos[0] < -buildingWidth * canvas.width) {
+                var temp = middleBuildingsHeights[0];
+                middleBuildingsHeights.shift();
+                middleBuildingsHeights.push(temp);
+                for (let i = 0; i < cityLength; i++)    
+                    middleBuildingsPos[i] += buildingWidth * canvas.width;
+            }
+
+            // if a building on the close layer is outside of the canvas, send it back 
+            if (closeBuildingsPos[0] < -buildingWidth * canvas.width) {
+                var temp = closeBuildingsHeights[0];
+                closeBuildingsHeights.shift();
+                closeBuildingsHeights.push(temp);
+                for (let i = 0; i < cityLength; i++) 
+                    closeBuildingsPos[i] += buildingWidth * canvas.width;
+            }
+
+            //animates the buildings
+            for (let i = 0; i < cityLength; i++) {
+                farBuildingsPos[i] += speed * 0.33;
+                middleBuildingsPos[i] += speed * 0.66;
+                closeBuildingsPos[i] += speed;
+            }
+
+            // On dessine !
+            draw()
+
+            // Request new animation frame
+            requestAnimationFrame(update);
+        }
+    </script>
+</head>
+<body onload="init()">
+<canvas id="theCanvas"></canvas>
+</body>
+</html>
