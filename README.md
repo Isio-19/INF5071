@@ -21,6 +21,8 @@ An animation to visualise the Lagrange points of the Sun and Earth, including th
 
 To move the scene, use either, the left, middle or right mouse buttons.
 
+![3D Model of the James-Webb telescope orbiting the Earth](gifs/james-webb.gif)
+
 ## Visualisaton of 3D data
 
 Visualisation of the connections between neurons from a certain point, in a mouse's brain.
@@ -29,6 +31,8 @@ Use the:
 - `Left mouse button`, torotate around the brain;
 - `Middle mouse button`, to zoom in or out;
 - `Right mouse button`, to pan the camera.
+
+![3D Model of a mouse's brain](gifs/mouse-brain-visualisation.gif)
 
 ## Canva Drawing
 
